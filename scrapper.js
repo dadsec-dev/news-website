@@ -52,8 +52,8 @@ app.get('/', function(req, res) {
      
           console.log(eurBuy);
           console.log(eurSell);
-          await page.close();
-          await browser.close();
+          //await page.close();
+          //await browser.close();
      }    
      start();
      res.render("home", {
