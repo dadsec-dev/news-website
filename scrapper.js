@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 const express = require("express");
 //const ejs = require("ejs");
-const host = '0.0.0.0'
+const port = 5000;
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -63,6 +63,6 @@ app.get('/', function(req, res) {
 })
 
 
-app.listen(9000, host, function () {
-     console.log("opened at 3000")
+app.listen(process.env.PORT || port,  function () {
+     console.log(`Listening on port ${port}`)
 })
