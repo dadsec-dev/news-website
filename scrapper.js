@@ -6,31 +6,32 @@ const port = 5000;
 
 const app = express();
 app.set('view engine', 'ejs');
+
 app.use(express.static(__dirname + '/public', {
      types: {
           'js': "text/javascript"
      }
 }));
+
 app.use(cors());
 
 var usdBuy;
 var usdSell;
-
 var gbpBuy;
 var gbpSell;
-
 var eurBuy;
 var eurSell;
 
 
 app.get('/', function(req, res) {
-
      async function start() {
           const browser = await puppeteer.launch();
+          console.log("puppeteer launched")
           const page = await browser.newPage();
-
-           page.setDefaultNavigationTimeout(0); 
+          console.log('Page created');
+          //page.setDefaultNavigationTimeout(0); 
           await page.goto("https://abokiforex.app/");
+          console.log('page loaded');
           const prices = await page.evaluate(() => {
                return Array.from(document.querySelectorAll(".overlay-text")).map(x => x.textContent)
           })
@@ -52,10 +53,13 @@ app.get('/', function(req, res) {
      
           console.log(eurBuy);
           console.log(eurSell);
-          //await page.close();
-          //await browser.close();
-     }    
+          await page.close();
+          await browser.close();
+     } 
+
+     
      start();
+     
      res.render("home", {
           usdBuy: usdBuy,
           usdSell: usdSell,
@@ -63,8 +67,10 @@ app.get('/', function(req, res) {
           gbpSell: gbpSell,
           eurBuy: eurBuy,
           eurSell: eurSell
-
+        
      });
+
+ 
 })
 
 
