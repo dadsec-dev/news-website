@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer");
 const express = require("express");
+const cors = require('cors');
 //const ejs = require("ejs");
 const port = 5000;
 
@@ -10,6 +11,7 @@ app.use(express.static(__dirname + '/public', {
           'js': "text/javascript"
      }
 }));
+app.use(cors());
 
 var usdBuy;
 var usdSell;
@@ -26,6 +28,8 @@ app.get('/', function(req, res) {
      async function start() {
           const browser = await puppeteer.launch();
           const page = await browser.newPage();
+
+           page.setDefaultNavigationTimeout(0); 
           await page.goto("https://abokiforex.app/");
           const prices = await page.evaluate(() => {
                return Array.from(document.querySelectorAll(".overlay-text")).map(x => x.textContent)
@@ -48,6 +52,7 @@ app.get('/', function(req, res) {
      
           console.log(eurBuy);
           console.log(eurSell);
+          await page.close();
           await browser.close();
      }    
      start();
